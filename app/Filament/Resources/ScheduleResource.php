@@ -15,6 +15,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TagsColumn;
+use Filament\Tables\Filters\SelectFilter;
+
 
 
 class ScheduleResource extends Resource
@@ -139,6 +141,7 @@ Forms\Components\Select::make('is_shown')
 
     public static function table(Table $table): Table
     {
+        // self::configureTable($table);
         return $table
                 ->columns([
                 Tables\Columns\TextColumn::make('day')->label('Hari')
@@ -177,8 +180,24 @@ Forms\Components\Select::make('is_shown')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
+              
+            SelectFilter::make('day')
+                ->label('Hari')
+                ->options([
+                    'Monday' => 'Monday',
+                    'Tuesday' => 'Tuesday',
+                    'Wednesday' => 'Wednesday',
+                    'Thursday' => 'Thursday',
+                    'Friday' => 'Friday',
+                    'Saturday' => 'Saturday',
+                    'Sunday' => 'Sunday',
+                ])
+                ->default(request()->get('day'))
+              ->query(fn (Builder $query, $data) => $data ? $query->where('day', $data) : $query),
+
+        ])
+        ->defaultSort('day')
+        
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -208,7 +227,7 @@ Forms\Components\Select::make('is_shown')
 public static function configureTable(Table $table): void
 {
     $day = request()->get('day');
-    dd($day);
+    // dd($day);
 
     if ($day) {
         $dayFormatted = ucfirst(strtolower($day));
