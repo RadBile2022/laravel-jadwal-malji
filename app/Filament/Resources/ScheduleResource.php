@@ -159,7 +159,7 @@ Forms\Components\Select::make('is_shown')
                         ->label('Keterangan Kajian')->sortable(),
 
                 Tables\Columns\TextColumn::make('time')->label('Waktu')
-                    ->sortable()
+                    ->sortable('time_id')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('topic')->label('Tema')
                     ->sortable()
