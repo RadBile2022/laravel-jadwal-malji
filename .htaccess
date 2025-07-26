@@ -1,0 +1,13 @@
+# Lindungi file sensitif
+<FilesMatch "^\.env$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect semua request ke public/index.php jika file/folder tidak ditemukan
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ public/index.php [L]
+</IfModule>
